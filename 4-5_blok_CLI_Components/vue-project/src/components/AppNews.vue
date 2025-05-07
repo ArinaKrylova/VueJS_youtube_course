@@ -1,20 +1,27 @@
 <template>
   <div class="card">
     <h3>{{ title }}</h3>
-    <button class="btn" @click="open">
-      {{ isNewsOpen ? "Закрыть" : "Открыть" }}
-    </button>
+    <app-button @action="open">
+      {{ isNewsOpen ? "Закрыть" : " Открыть" }}
+    </app-button>
+    <app-button color="danger" v-if="wasRead" @action="$emit('unmark', id)">
+      Отметить непрочитанной
+    </app-button>
     <div v-if="isNewsOpen">
-      <hr/>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis, consectetur?</p>
-      <button v-if="!wasRead" class="btn primary" @click="mark">
+      <hr />
+      <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis,
+        consectetur?
+      </p>
+      <app-button v-if="!wasRead" color="primary" @action="mark">
         Прочесть новость
-      </button>
+      </app-button>
     </div>
   </div>
 </template>
 
 <script>
+import AppButton from "./AppButton.vue";
 export default {
   // props: ['title'],
   // emits: ['changeIsOpen'],
@@ -40,7 +47,14 @@ export default {
   // emits: ['open-news'],
   emits: {
     "open-news": null,
-    'read-news': null
+    "read-news"(id) {
+      if (id) {
+        return true;
+      }
+      console.warn("Нет параметров id для emit read-news");
+      return false;
+    },
+    unmark: null,
   },
   data() {
     return {
@@ -55,9 +69,19 @@ export default {
       }
     },
     mark() {
-      this.isNewsOpen = false
-      this.$emit("read-news", this.id)
-    }
+      this.isNewsOpen = false;
+      this.$emit("read-news", this.id);
+    },
+    // unmark() {
+    //   this.$emit("unmark", this.id)
+    // }
   },
+  components: {
+    AppButton,
+  },
+  // mounted() {
+  //   console.log(this.$props.isOpen);
+
+  // }
 };
 </script>

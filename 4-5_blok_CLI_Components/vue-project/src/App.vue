@@ -2,7 +2,9 @@
   <div class="container pt-1">
     <div class="card">
       <h2>Актуальные новости {{ now }}</h2>
-      <span>Открыто: <strong>{{ openRate }} </strong>| Прочитано: <strong>{{ readRate }}</strong></span>
+      <span>Открыто: <strong>{{ openRate }} </strong>
+        | Прочитано: <strong>{{ readRate }}</strong>
+      </span>
     </div>
 
     <app-news
@@ -14,6 +16,7 @@
       :was-read="item.wasRead"
       @open-news="openNews"
       @read-news="readNews"
+      @unmark="unreadNews"
     ></app-news>
     <!-- <AppNews/> -->
   </div>
@@ -35,6 +38,7 @@ export default {
       now: new Date().toLocaleDateString(),
       openRate: 0,
       readRate: 0,
+      notRead: 0,
       news: <New[]>[
         {
           title: "Lorem ipsum dolor sit amet consectetur",
@@ -59,6 +63,11 @@ export default {
       const idx = this.news.findIndex(news => news.id === id)
       this.news[idx].wasRead = true
       this.readRate++;
+    },
+    unreadNews(id) {
+      const news = this.news.find(news => news.id === id)
+      news.wasRead = false
+      this.readRate--
     }
   },
   components: {
