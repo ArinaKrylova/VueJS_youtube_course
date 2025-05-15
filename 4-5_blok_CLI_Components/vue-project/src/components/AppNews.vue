@@ -16,12 +16,15 @@
       <app-button v-if="!wasRead" color="primary" @action="mark">
         Прочесть новость
       </app-button>
+      <app-news-list></app-news-list>
     </div>
   </div>
 </template>
 
 <script>
 import AppButton from "./AppButton.vue";
+import AppNewsList from "./AppNewsList.vue";
+
 export default {
   // props: ['title'],
   // emits: ['changeIsOpen'],
@@ -78,6 +81,7 @@ export default {
   },
   components: {
     AppButton,
+    AppNewsList,
   },
   // mounted() {
   //   console.log(this.$props.isOpen);

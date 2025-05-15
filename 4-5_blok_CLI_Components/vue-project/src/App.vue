@@ -1,89 +1,50 @@
 <template>
   <div class="container pt-1">
     <div class="card">
-      <h2>Актуальные новости {{ now }}</h2>
-      <span>Открыто: <strong>{{ openRate }} </strong>
-        | Прочитано: <strong>{{ readRate }}</strong>
-      </span>
+      <h2>Динамические и асинхронные компоненты</h2>
+
+      <app-button :color="oneColor" @action="active = 'one'">One</app-button>
+
+      <app-button
+        :color="twoColor"
+        @action="active = 'two'"
+        >Two</app-button
+      >
     </div>
 
-    <app-news
-      v-for="item in news"
-      :key="item.id"
-      :title="item.title"
-      :id="item.id"
-      :is-open="item.isOpen"
-      :was-read="item.wasRead"
-      @open-news="openNews"
-      @read-news="readNews"
-      @unmark="unreadNews"
-    ></app-news>
-    <!-- <AppNews/> -->
+    <keep-alive>
+      <component :is="componentName"></component>
+    </keep-alive>
   </div>
 </template>
 
-<script lang="ts">
-import AppNews from "./components/AppNews.vue";
-
-interface New {
-  title: string;
-  id: number;
-  isOpen: boolean;
-  wasRead: boolean
-}
+<script>
+import AppButton from "./components/AppButton.vue";
+import AppTextOne from "./components/AppTextOne.vue";
+import AppTextTwo from "./components/AppTextTwo.vue";
 
 export default {
   data() {
     return {
-      now: new Date().toLocaleDateString(),
-      openRate: 0,
-      readRate: 0,
-      notRead: 0,
-      news: <New[]>[
-        {
-          title: "Lorem ipsum dolor sit amet consectetur",
-          id: 1,
-          isOpen: false,
-          wasRead: false
-        },
-        {
-          title: "Lorem ipsum dolor sit ",
-          id: 2,
-          isOpen: false,
-          wasRead: false
-        },
-      ],
+      active: "one", //two
     };
   },
-  methods: {
-    openNews() {
-      this.openRate++;
+  computed: {
+    componentName() {
+      //   if (this.active === "one") {
+      //     return "app-text-one";
+      //   }
+      //   return "app-text-two";
+      return "app-text-" + this.active;
     },
-    readNews(id) {
-      const idx = this.news.findIndex(news => news.id === id)
-      this.news[idx].wasRead = true
-      this.readRate++;
+    oneColor() {
+      return this.active === "one" ? "primary" : "";
     },
-    unreadNews(id) {
-      const news = this.news.find(news => news.id === id)
-      news.wasRead = false
-      this.readRate--
-    }
+    twoColor() {
+      return this.active === "two" ? "primary" : "";
+    },
   },
-  components: {
-    AppNews,
-    // AppNews: AppNews
-  },
-  // methods: {
-  //   changeIsOpen(item:New) {
-  //     const findIndex = this.news
-  //       .findIndex((n:New) => n.id === item.id)
-
-  //     if (findIndex > -1) {
-  //       this.news[findIndex].isOpen = !this.news[findIndex].isOpen
-  //     }
-  //   }
-  // }
+  components: { AppButton, AppTextOne, AppTextTwo },
 };
 </script>
 
